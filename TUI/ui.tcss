@@ -2,24 +2,60 @@ Screen {
     background: $background-darken-1;
 }
 
-ASCIName {
-    align: left top;
-    padding-top: 1;
-    padding-left: 4;
-    height: 10%;
+
+#logo_and_contentswitcher{
+    dock: top; /* set as fixed as subtracted from total screen size (helpful for height measures)*/
+    height: 5;
+    padding: 1 2;
+    align-vertical: middle;
 }
 
-/* dont modify the min-width;it helps overides textual's defualt higher value min width for buttons */
+
+/* dont modify the min-width;it helps overides textual's defualt higher value min width for buttons ; also content-align is for text alignment*/
 Button {
     content-align: center middle;  
     height: auto;                 
     min-width: 5;                
 }
 
-#terminal-button, #info-button {
-    content-align: center middle;
-    height: 7%;
-    width: 3%;
+#terminal_button, #info_button {
+    height: 3;
+    width: 5;
     background: $background-darken-1;
     border: round $background-darken-1 ;
+}
+
+.active_button{
+    border: round $accent-darken-1 ;
+    color: $accent-darken-1 ;
+}
+
+#terminal{
+    border: round $background;
+}
+
+#terminal_screen {
+    height: 50%;
+    margin-top: 1;
+    background: $background-darken-1 ;
+    /*border: round $primary-darken-3;*/
+}
+
+StatusBar {
+    height: 2;
+    align: center middle;
+    padding: 0 1;
+}
+
+#status-line{
+    color: $primary-darken-1;
+    background: $background-darken-1;
+    width:auto;
+    max-width: 100%;
+}
+
+#loading-bar {
+    width: 10;
+    height: 1;
+    padding: 0 1;
 }
