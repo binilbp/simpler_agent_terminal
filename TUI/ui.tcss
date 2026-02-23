@@ -1,0 +1,25 @@
+Screen {
+    background: $background-darken-1;
+}
+
+ASCIName {
+    align: left top;
+    padding-top: 1;
+    padding-left: 4;
+    height: 10%;
+}
+
+/* dont modify the min-width;it helps overides textual's defualt higher value min width for buttons */
+Button {
+    content-align: center middle;  
+    height: auto;                 
+    min-width: 5;                
+}
+
+#terminal-button, #info-button {
+    content-align: center middle;
+    height: 7%;
+    width: 3%;
+    background: $background-darken-1;
+    border: round $background-darken-1 ;
+}
