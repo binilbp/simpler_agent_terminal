@@ -1,8 +1,9 @@
 # this file contains custom classes that are imported to the main ui.py file
 
 
+from textual.events import Key
 from textual.app import ComposeResult
-from textual.widgets import Label, RichLog, LoadingIndicator, TextArea, Button
+from textual.widgets import Label, RichLog, LoadingIndicator, Button, TextArea
 from textual.containers import Container, Horizontal, Vertical
 from config.settings import SETTINGS
 
@@ -52,14 +53,38 @@ class StatusBar(Horizontal):
 
 
 
+class ChatInput(TextArea):
+    #overide textarea default key handling
+    async def _on_key(self, event: Key) -> None:
+        if event.key == "enter":
+            # Stop the parent TextArea from inserting a newline
+            event.stop()
+            event.prevent_default()
+            
+            # Submit the text
+            user_text = self.text.strip()
+            if user_text:
+                self.clear()
+                self.app.handle_submission(user_text)
+                
+        elif event.key == "shift+enter":
+            # Stop the parent TextArea from doing whatever it wants
+            event.stop()
+            event.prevent_default()
+            
+            # Manually insert the newline
+            self.insert("\n")
+            
+        else:
+            # rest given to parent class
+            await super()._on_key(event)
+
+
 class UserInput(Horizontal):
     def compose(self) -> ComposeResult:
-        input_box = TextArea(id="input-box")
+        input_box = ChatInput(id="input_box")
         input_box.border_title = SETTINGS.default_dir
-        input_box.placeholder = "Type your query here..\nPress Enter to sent query"
+        input_box.placeholder = "Type your query here.. \nPress enter to send"
         input_box.highlight_cursor_line = False
         yield input_box
-        # with Vertical(id="input-buttons"):
-        #     yield Button("", id="send-button")
-        #     yield Button("", id="stop-button")
 
