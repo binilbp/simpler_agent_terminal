@@ -1,6 +1,7 @@
 {
     "name": "Linquix",
     "default_dir": "default",
+    "banned_commands": "rm",
     "debug": false,
     "classifier_llm": {
         "service" : "groq_api",
@@ -12,7 +13,7 @@
     "agent_llm":{
         "service" : "groq_api",
         "model_name": "llama-3.1-8b-instant",
-        "model_temp": 1,
+        "model_temp": 0,
         "max_retry": 2,
         "max_tokens": 300
     }
