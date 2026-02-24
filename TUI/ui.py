@@ -4,17 +4,13 @@
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Container, Vertical
 from textual.widgets import Button, Label, ContentSwitcher
-from TUI.ui_classes import ASCIname, TerminalScreen, StatusBar
+from TUI.ui_classes import ASCIname, TerminalScreen, StatusBar, UserInput
 
 
 class App(App):
     CSS_PATH = 'ui.tcss'
     theme = 'dracula'
 
-
-
-    def on_mount(self) -> None:
-        pass
 
 
     def compose(self) -> ComposeResult:
@@ -27,7 +23,7 @@ class App(App):
             with Vertical(id='terminal'):
                 yield TerminalScreen()
                 yield StatusBar()
-
+                yield UserInput()
 
             yield Label('info screen',id='info')
 

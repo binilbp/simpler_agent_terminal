@@ -2,8 +2,8 @@
 
 
 from textual.app import ComposeResult
-from textual.widgets import Label, RichLog, LoadingIndicator
-from textual.containers import Container, Horizontal
+from textual.widgets import Label, RichLog, LoadingIndicator, TextArea, Button
+from textual.containers import Container, Horizontal, Vertical
 
 
 
@@ -19,6 +19,7 @@ class ASCIname(Container):
 
 
 
+# Display the chathistory and command output  
 class TerminalScreen(Container):
     def compose(self) -> ComposeResult:
         terminal_screen = RichLog(
@@ -47,3 +48,17 @@ class StatusBar(Horizontal):
 
     def on_mount(self) -> None:
         self.query_one("#status-line", RichLog).write("Running as [red]NON-ROOT[/] user")
+
+
+
+class UserInput(Horizontal):
+    def compose(self) -> ComposeResult:
+        input_box = TextArea(id="input-box")
+        input_box.border_title = "/home/binil/~"
+        input_box.placeholder = "Type your query here..\nPress Enter to sent query"
+        input_box.highlight_cursor_line = False
+        yield input_box
+        # with Vertical(id="input-buttons"):
+        #     yield Button("", id="send-button")
+        #     yield Button("", id="stop-button")
+

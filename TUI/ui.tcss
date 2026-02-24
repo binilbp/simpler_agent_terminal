@@ -5,8 +5,9 @@ Screen {
 
 #logo_and_contentswitcher{
     dock: top; /* set as fixed as subtracted from total screen size (helpful for height measures)*/
-    height: 5;
-    padding: 1 2;
+    margin-top: 1;
+    height: 3;
+    padding: 0 2;
     align-vertical: middle;
 }
 
@@ -25,33 +26,34 @@ Button {
     border: round $background-darken-1 ;
 }
 
-.active_button{
+.active_button {
     border: round $accent-darken-1 ;
     color: $accent-darken-1 ;
 }
 
-#terminal{
+ContentSwitcher {
+    height: 1fr;
     border: round $background;
 }
 
+TerminalScreen {
+    height: 1fr;
+    /*border: round $background;*/
+}
+
 #terminal_screen {
-    height: 50%;
-    margin-top: 1;
     background: $background-darken-1 ;
-    /*border: round $primary-darken-3;*/
 }
 
 StatusBar {
     height: 2;
     align: center middle;
-    padding: 0 1;
 }
 
 #status-line{
     color: $primary-darken-1;
     background: $background-darken-1;
     width:auto;
-    max-width: 100%;
 }
 
 #loading-bar {
@@ -59,3 +61,13 @@ StatusBar {
     height: 1;
     padding: 0 1;
 }
+
+UserInput {
+    height: 7;
+}
+
+#input-box {
+    border: round $primary-darken-2;
+    background: $background-darken-2;
+}
+
