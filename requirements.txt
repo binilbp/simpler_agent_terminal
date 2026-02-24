@@ -1,5 +1,9 @@
 textual
 textual-dev
 
+langchain
+langgraph
+langchain-ollama
+langchain-groq
+
 python-dotenv
-pydantic
