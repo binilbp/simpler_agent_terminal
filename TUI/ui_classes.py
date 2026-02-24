@@ -4,6 +4,7 @@
 from textual.app import ComposeResult
 from textual.widgets import Label, RichLog, LoadingIndicator, TextArea, Button
 from textual.containers import Container, Horizontal, Vertical
+from config.settings import SETTINGS
 
 
 
@@ -47,14 +48,14 @@ class StatusBar(Horizontal):
         yield status_line
 
     def on_mount(self) -> None:
-        self.query_one("#status-line", RichLog).write("Running as [red]NON-ROOT[/] user")
+        self.query_one("#status-line", RichLog).write("Running as [green]NON-ROOT[/] user")
 
 
 
 class UserInput(Horizontal):
     def compose(self) -> ComposeResult:
         input_box = TextArea(id="input-box")
-        input_box.border_title = "/home/binil/~"
+        input_box.border_title = SETTINGS.default_dir
         input_box.placeholder = "Type your query here..\nPress Enter to sent query"
         input_box.highlight_cursor_line = False
         yield input_box

@@ -39,6 +39,7 @@ ContentSwitcher {
 TerminalScreen {
     height: 1fr;
     /*border: round $background;*/
+    margin-bottom: 1;
 }
 
 #terminal_screen {
@@ -67,7 +68,9 @@ UserInput {
 }
 
 #input-box {
+    padding: 1 2;
     border: round $primary-darken-2;
-    background: $background-darken-2;
+    background: $background-darken-1;
+    border-title-color: #ADFF2F;
 }
 
