@@ -1,2 +1,5 @@
 textual
 textual-dev
+
+python-dotenv
+pydantic
