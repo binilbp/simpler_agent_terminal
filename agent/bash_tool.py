@@ -37,14 +37,14 @@ class Bash:
                 new_cwd = parts[1].strip()
                 if os.path.isdir(new_cwd):
                     self.cwd = new_cwd
-                    # also update the TUI 
-                    update_TUI_dir(self.cwd)
+
             else:
                 output = stdout
-            return {"stdout": output, "stderr": result.stderr, "cwd": self.cwd}
+            return f"stdout: {output}, stderr: {result.stderr},cwd: {self.cwd}"
+        except:
+            return "Problem with execution tool"
 
-        except Exception as e:
-            return {"error": str(e)}
+
 
 
 bash_core = Bash()
@@ -54,10 +54,7 @@ bash_core = Bash()
 def bash_tool(cmd: str) -> str:
     """Execute bash command. Input should be the exact command string."""
     result = bash_core.exec_bash_command(cmd)
-    if 'error' in result and result.get('error'):
-        return f"Error: {result.get['error']}"
-    return f"STDOUT:\n{result['stdout']}\nSTDERR:\n{result['stderr']}\nCWD:\n{result['cwd']}"
-
+    return result
 
 
 

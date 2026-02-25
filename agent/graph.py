@@ -21,7 +21,8 @@ llm_with_tools = llm.bind_tools(tools)
 
 def agent(state: MessagesState):
 
-    SYSTEM_PROMPT = """You are Linquix, an expert AI terminal assistant and system administrator.
+    name = SETTINGS.name
+    SYSTEM_PROMPT =  f"""You are {name}, an expert AI terminal assistant and system administrator.
 Your primary goal is to help the user navigate their system, manage files, write code, and troubleshoot issues by executing shell commands.
 
 You have access to a `bash_tool` that executes commands on the user's local machine.
