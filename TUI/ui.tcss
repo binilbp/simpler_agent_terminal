@@ -44,6 +44,7 @@ TerminalScreen {
 
 #terminal_screen {
     background: $background-darken-1 ;
+    overflow-x: hidden;
 }
 
 StatusBar {

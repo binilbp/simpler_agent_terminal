@@ -86,5 +86,6 @@ class UserInput(Horizontal):
         input_box.border_title = SETTINGS.default_dir
         input_box.placeholder = "Type your query here.. \nPress enter to send"
         input_box.highlight_cursor_line = False
+        input_box.wrap = True
         yield input_box
 
