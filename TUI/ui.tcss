@@ -67,7 +67,7 @@ UserInput {
     height: 7;
 }
 
-#input-box {
+#input_box {
     padding: 1 2;
     border: round $primary-darken-2;
     background: $background-darken-1;
