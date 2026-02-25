@@ -23,10 +23,12 @@ def write_log(self, icon: str, content: str, is_markdown: bool = False):
     grid.add_row(icon, renderable_content)
 
     # Write to log (inside a thread-safe call)
-    self.call_from_thread(lambda: terminal_screen.write(grid))
+    # self.call_from_thread(lambda: terminal_screen.write(grid))
+    terminal_screen.write(grid)
     
     # Optional: Add an empty line for spacing
-    self.call_from_thread(lambda: terminal_screen.write(""))
+    # self.call_from_thread(lambda: terminal_screen.write(""))
+    terminal_screen.write("")
 
 
 
