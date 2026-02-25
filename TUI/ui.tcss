@@ -58,7 +58,7 @@ StatusBar {
     width:auto;
 }
 
-#loading-bar {
+#loading_bar {
     width: 10;
     height: 1;
     padding: 0 1;

@@ -41,3 +41,15 @@ def set_status(self, status: str):
     status_line.clear()
     status_line.write(status)
     
+
+
+# used to enable or disable the laoding indicator
+def toggle_loading_bar(self):
+    loading_bar = self.query_one("#loading_bar")
+
+    if loading_bar.styles.display == "none":
+        loading_bar.styles.display = "block"
+    else:
+        loading_bar.styles.display = "none"
+
+

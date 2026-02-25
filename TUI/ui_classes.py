@@ -41,7 +41,7 @@ class TerminalScreen(Container):
 
 class StatusBar(Horizontal):
     def compose(self) -> ComposeResult:
-        yield LoadingIndicator(id="loading-bar")
+        yield LoadingIndicator(id="loading_bar")
         status_line = RichLog(
                 id="status-line",
                 markup = True
@@ -83,7 +83,7 @@ class ChatInput(TextArea):
 class UserInput(Horizontal):
     def compose(self) -> ComposeResult:
         input_box = ChatInput(id="input_box")
-        input_box.border_title = SETTINGS.default_dir
+        input_box.border_title = f'> {SETTINGS.default_dir}'
         input_box.placeholder = "Type your query here.. \nPress enter to send"
         input_box.highlight_cursor_line = False
         input_box.wrap = True

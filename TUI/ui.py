@@ -1,5 +1,5 @@
 # this file contains python textual TUI code setup 
-
+from groq import APIConnectionError
 
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Container, Vertical
@@ -7,7 +7,7 @@ from textual.widgets import Button, Label, ContentSwitcher, TextArea
 from textual import work
 
 from TUI.ui_classes import ASCIname, TerminalScreen, StatusBar, UserInput 
-from TUI.ui_helper_functions import write_log
+from TUI.ui_helper_functions import write_log, toggle_loading_bar
 
 from langchain_core.messages import HumanMessage
 from agent.graph import graph
@@ -42,7 +42,7 @@ class App(App):
         self.query_one('#terminal_button').add_class("active_button")
 
         # hide the loading bar 
-        self.query_one("#loading-bar").styles.display = "none"
+        self.query_one("#loading_bar").styles.display = "none"
 
         #focus on input box
         self.query_one("#input_box").focus()
@@ -67,7 +67,6 @@ class App(App):
 
     # this functino is called by the cutom class 'ChatInput' created 
     def handle_submission(self, user_text: str) -> None:
-        write_log(self, icon="  [green] [/] ", content = user_text)
 
         # get the state to check this resume of previous run or fresh run
         state = graph.get_state(self.config)
@@ -75,21 +74,23 @@ class App(App):
         # state found means this resumed run
         if state and state.next == ("tools",):
             if user_text.lower() in ['y', 'yes']:
-                write_log(self, "", "[bold green]Execution Approved.[/]", is_markdown=True)
+                write_log(self, icon= "  [green] [/] ", content = "[green]Execution Approved.[/]" )
                 self.run_agent_graph(None) 
             else:
-                write_log(self, "", "[bold red]Execution Denied.[/]", is_markdown=True)
+                write_log(self, icon= "  [red] [/] ", content = "[red]Execution Denied.[/]" )
             return 
 
-        # no state found means fresh run
+        # no state found means fresh run 
+        write_log(self, icon="  [green] [/] ", content = user_text)
         self.run_agent_graph(user_text)
     
 
     @work(exclusive=True,thread=True) # run graph logic in a background worker thread
     async def run_agent_graph(self, user_text: str | None) -> None:
         # set loading indicator safely from the worker thread
-        self.call_from_thread(lambda: setattr(self.query_one("#loading-bar"), "styles.display", "block"))
-        
+        # self.call_from_thread(toggle_loading_bar(self))
+        toggle_loading_bar(self)
+
         try:
             # if user_text is provided, it's a new request. If None, we are resuming after an approval.
             inputs = {"messages": [HumanMessage(content=user_text)]} if user_text else None
@@ -102,33 +103,40 @@ class App(App):
                 # read current cwd from bash_core and update the UI securely on the main thread
                 current_dir = bash_core.cwd
                 self.call_from_thread(
-                    lambda d=current_dir: setattr(self.query_one("#input_box"), "border_title", d)
+                    lambda d=current_dir: setattr(self.query_one("#input_box"), "border_title", f'> {d}')
                 )
 
-                # check if the graph paused because it wants to run a tool
-                if state.next == ("tools",):
-                    tool_calls = last_message.tool_calls
-                    for tc in tool_calls:
-                        tool_name = tc['name']
-                        tool_args = tc['args']
-                        
-                        if tool_name == "bash_tool":
-                            cmd_to_run = tool_args.get('cmd')
-                            warning = f"[bold yellow]Terminal Execution Request[/]\nAgent wants to run: [cyan]'{cmd_to_run}'[/]\nAllow? [y/N]"
-                            write_log(self, "⚠️", warning, is_markdown=True)
-                        else:
-                            warning = f"[bold yellow]Tool Execution Request[/]\nAgent wants to use: [cyan]{tool_name}[/]\nWith args: {tool_args}\nAllow? [y/N]"
-                            write_log(self, "⚙️", warning, is_markdown=True)
-                    
-                    break # Stop streaming, wait for user input from the UI
-                
-                # otherwise, if it's an AI message, display it in the terminal
-                elif last_message.type == "ai" and last_message.content:
+                # if it's an AI message, display it in the terminal
+                if last_message.type == "ai" and last_message.content:
                     write_log(self,"  [blue] [/] ", last_message.content, is_markdown=True)
+
+
+            # for loop stops when called interrupt or finished
+            # check if the graph paused because it was interrupted to run a tool or finished
+            if state.next == ("tools",):
+                tool_calls = last_message.tool_calls
+                for tc in tool_calls:
+                    tool_name = tc['name']
+                    tool_args = tc['args']
+                    
+                    if tool_name == "bash_tool":
+                        cmd_to_run = tool_args.get('cmd')
+                        warning = f"[bold yellow]Terminal Execution Request[/]\nAgent wants to run: [cyan]'{cmd_to_run}'[/]\nAllow? (y/n)"
+                        write_log(self, "  [yellow] [/] ", content = warning )
+                
+                
+        except APIConnectionError as e:
+            self.notify(
+                    title = 'Error',
+                    message = str(e),
+                    severity = 'error', 
+                    timeout = 3
+            )
+
 
         finally:
             # hide loading indicator once finished or paused
-            self.call_from_thread(lambda: setattr(self.query_one("#loading-bar"), "styles.display", "none"))
+            toggle_loading_bar(self)
 
 
 
