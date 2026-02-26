@@ -7,9 +7,9 @@ from textual.widgets import Button, Label, ContentSwitcher, TextArea
 from textual import work
 
 from TUI.ui_classes import ASCIname, TerminalScreen, StatusBar, UserInput 
-from TUI.ui_helper_functions import write_log, toggle_loading_bar
+from TUI.ui_helper_functions import write_log, toggle_loading_bar, set_status
 
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import HumanMessage, ToolMessage
 from agent.graph import graph
 from agent.bash_tool import bash_core
 
@@ -76,11 +76,31 @@ class App(App):
             if user_text.lower() in ['y', 'yes']:
                 write_log(self, icon= "  [green] [/] ", content = "[green]Execution Approved.[/]" )
                 self.run_agent_graph(None) 
+            # modifying the tool node return to mock return
             else:
+                last_message = state.values["messages"][-1]
+                tool_call_id = last_message.tool_calls[0]["id"]
+
+                # creating message to inform LLm about denial
+                mock_tool_msg = ToolMessage(
+                    content=f"Action denied by user. User said: '{user_text}'.Inform the user",
+                    tool_call_id=tool_call_id
+                )
+                
+                graph.update_state(
+                    self.config,
+                    {"messages": [mock_tool_msg]},
+                    as_node="tools"  
+                )
+                
+                self.run_agent_graph(None)
                 write_log(self, icon= "  [red] [/] ", content = "[red]Execution Denied.[/]" )
+                
+            # breaking the execution here 
             return 
 
         # no state found means fresh run 
+        write_log(self, icon="", content = "")
         write_log(self, icon="  [green] [/] ", content = user_text)
         self.run_agent_graph(user_text)
     
@@ -121,7 +141,7 @@ class App(App):
                     
                     if tool_name == "bash_tool":
                         cmd_to_run = tool_args.get('cmd')
-                        warning = f"[bold yellow]Terminal Execution Request[/]\nAgent wants to run: [cyan]'{cmd_to_run}'[/]\nAllow? (y/n)"
+                        warning = f"[bold yellow]Command Execution Request[/]: [cyan]'{cmd_to_run}'[/]\nAllow? (y/n)"
                         write_log(self, "  [yellow] [/] ", content = warning )
                 
                 
