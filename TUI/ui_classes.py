@@ -3,7 +3,7 @@
 
 from textual.events import Key
 from textual.app import ComposeResult
-from textual.widgets import Label, RichLog, LoadingIndicator, Button, TextArea
+from textual.widgets import Label, RichLog, LoadingIndicator, Button, TextArea, Switch, Static
 from textual.containers import Container, Horizontal, Vertical
 from config.settings import SETTINGS
 
@@ -89,3 +89,9 @@ class UserInput(Horizontal):
         input_box.wrap = True
         yield input_box
 
+
+class OperationMode(Vertical):
+    def compose(self) -> ComposeResult:
+        yield Static("MANNUAL", id = 'mode_display')
+        yield Switch(id='mode_switch', value =True)
+        

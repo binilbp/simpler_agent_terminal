@@ -32,7 +32,6 @@ def write_log(self, icon: str, content: str, is_markdown: bool = False):
 
 
 
-
 # this function used to set the content of the text displayed as status 
 def set_status(self, status: str):
     status_line = self.query_one("#status-line", RichLog)
@@ -44,7 +43,7 @@ def set_status(self, status: str):
 
 
 # used to enable or disable the laoding indicator
-def toggle_loading_bar(self):
+def toggle_loading_bar(self) -> None:
     loading_bar = self.query_one("#loading_bar")
 
     if loading_bar.styles.display == "none":
@@ -52,4 +51,17 @@ def toggle_loading_bar(self):
     else:
         loading_bar.styles.display = "none"
 
+
+
+# used to toggle the agent operation mode
+def toggle_operation_mode(self) -> None:
+    mode_switch = self.query_one('#mode_switch')
+    
+    mode_display = self.query_one('#mode_display')
+    # on state
+    if mode_switch.value :
+        mode_display.update("MANNUAL")
+    # off state
+    else:
+        mode_display.update("AUTOMATIC")
 

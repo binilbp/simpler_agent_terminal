@@ -3,11 +3,12 @@ from groq import APIConnectionError
 
 from textual.app import App, ComposeResult
 from textual.containers import Horizontal, Container, Vertical
-from textual.widgets import Button, Label, ContentSwitcher, TextArea
+from textual.widgets import Button, Label, ContentSwitcher, TextArea, Footer, Switch
+from textual.binding import Binding
 from textual import work
 
-from TUI.ui_classes import ASCIname, TerminalScreen, StatusBar, UserInput 
-from TUI.ui_helper_functions import write_log, toggle_loading_bar, set_status
+from TUI.ui_classes import ASCIname, TerminalScreen, StatusBar, UserInput, OperationMode
+from TUI.ui_helper_functions import write_log, toggle_loading_bar, set_status, toggle_operation_mode
 
 from langchain_core.messages import HumanMessage, ToolMessage
 from agent.graph import graph
@@ -19,7 +20,12 @@ class App(App):
     CSS_PATH = 'ui.tcss'
     theme = 'dracula'
 
+    BINDINGS =[
+        Binding(key="ctrl+q", action="quit", description="Quit App"),
+        Binding(key="ctrl+m", action="toggle_op_mode", description="Toggle Mode"),
+    ]
 
+    
 
     def compose(self) -> ComposeResult:
         with Horizontal(id='logo_and_contentswitcher'):
@@ -31,9 +37,14 @@ class App(App):
             with Vertical(id='terminal'):
                 yield TerminalScreen()
                 yield StatusBar()
-                yield UserInput()
+                with Horizontal(id='input_and_mode'):
+                    yield UserInput()
+                    yield OperationMode(id='operation_mode')
+
 
             yield Label('info screen',id='info')
+
+        yield Footer(show_command_palette = False)
 
 
 
@@ -63,6 +74,20 @@ class App(App):
             self.query_one(ContentSwitcher).current = 'info' 
             self.query_one('#info_button').add_class("active_button")
             self.query_one('#terminal_button').remove_class("active_button")
+
+
+
+
+
+    # toggle the switch using shortcut
+    def action_toggle_op_mode(self) -> None:
+        mode_switch = self.query_one('#mode_switch')
+        mode_switch.toggle()
+
+    # handling the switch toggle by changing mode display and mode
+    def on_switch_changed(self, event: Switch.Changed) -> None:
+        toggle_operation_mode(self)
+
 
 
     # this functino is called by the cutom class 'ChatInput' created 
