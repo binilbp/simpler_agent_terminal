@@ -20,7 +20,7 @@ def get_llm():
 
 def get_groq_agent():
     llm = ChatGroq(
-        model_name = SETTINGS.agent_llm.model_name,
+        model = SETTINGS.agent_llm.model_name,
         temperature = SETTINGS.agent_llm.model_temp,
         max_retries = SETTINGS.agent_llm.max_retry,
         max_tokens = SETTINGS.agent_llm.max_tokens
@@ -33,7 +33,7 @@ def get_groq_agent():
 
 def get_ollama_agent():
     llm = ChatOllama(
-        model_name = SETTINGS.agent_llm.model_name,
+        model = SETTINGS.agent_llm.model_name,
         temperature = SETTINGS.agent_llm.model_temp,
         max_retries = SETTINGS.agent_llm.max_retry,
         max_tokens = SETTINGS.agent_llm.max_tokens

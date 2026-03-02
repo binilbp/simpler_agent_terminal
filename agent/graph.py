@@ -6,7 +6,7 @@ from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
 from config.settings import SETTINGS
 from agent.bash_tool import bash_tool
-from aget.llm import get_llm
+from agent.llm import get_llm
 
 
 # Initialize LLM using settings

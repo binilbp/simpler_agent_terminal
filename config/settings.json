@@ -4,10 +4,10 @@
     "banned_commands": "",
     "debug": false,
     "agent_llm":{
-        "service" : "groq_api",
-        "model_name": "qwen/qwen3-32b",
+        "service" : "ollama",
+        "model_name": "qwen3:8b",
         "model_temp": 0,
         "max_retry": 2,
-        "max_tokens": 300
+        "max_tokens": 600
     }
 }
