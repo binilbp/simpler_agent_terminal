@@ -64,8 +64,13 @@ StatusBar {
     padding: 0 1;
 }
 
+#input_and_mode {
+    height: 6;
+    width: 100%;
+}
+
 UserInput {
-    height: 7;
+    height: 6;
 }
 
 #input_box {
@@ -74,4 +79,26 @@ UserInput {
     background: $background-darken-1;
     border-title-color: #ADFF2F;
 }
+
+OperationMode {
+    width: 13;
+    height: 6;
+    border: round $primary;
+    align: center middle;
+}
+
+#mode_display {
+    content-align: center middle;
+    color: $primary
+}
+
+#mode_switch {
+    width: 100%;
+    padding: 1 2;
+    margin: 0 1;
+    background: $background;
+    border: none;
+}
+
+
 
