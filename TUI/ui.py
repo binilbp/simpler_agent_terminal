@@ -165,9 +165,21 @@ class App(App):
                     tool_args = tc['args']
                     
                     if tool_name == "bash_tool":
-                        cmd_to_run = tool_args.get('cmd')
-                        warning = f"[bold yellow]Command Execution Request[/]: [cyan]'{cmd_to_run}'[/]\nAllow? (y/n)"
-                        write_log(self, "  [yellow] [/] ", content = warning )
+                        # get operation mode
+                        mode_switch = self.query_one('#mode_switch')
+
+                        # not mannual
+                        if not mode_switch.value:
+                            cmd_to_run = tool_args.get('cmd')
+                            warning = f"[bold yellow]Executing Command[/]: [cyan]'{cmd_to_run}'[/]"
+                            write_log(self, "  [yellow] [/] ", content = warning )
+                            self.run_agent_graph(None)
+
+                        # mannual mode
+                        else:
+                            cmd_to_run = tool_args.get('cmd')
+                            warning = f"[bold yellow]Command Execution Request[/]: [cyan]'{cmd_to_run}'[/]\nAllow? (y/n)"
+                            write_log(self, "  [yellow] [/] ", content = warning )
                 
                 
         except APIConnectionError as e:
