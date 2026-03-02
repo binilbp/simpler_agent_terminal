@@ -12,7 +12,7 @@ load_dotenv()
 
 class LLMParams(BaseModel):
     #defining the possible services to user
-    service: Literal["groq_api", "ollama" ] 
+    service: Literal["groq", "ollama" ] 
     model_name: str
     model_temp: float = Field(ge=0.0, le=2.0) # Temperature constraints
     max_retry: int = Field(default=2, ge=0)
@@ -25,7 +25,6 @@ class Settings(BaseModel):
     default_dir: str
     banned_commands: str
     debug: bool
-    classifier_llm: LLMParams
     agent_llm: LLMParams
     
 
@@ -43,9 +42,6 @@ class Settings(BaseModel):
             if not os.path.exists(self.default_dir):
                 raise ValueError(f"Provided default directory path '{self.default_dir}' doesn't seem to exist in system.")
 
-        # Check Classifier Service api key
-        if self.classifier_llm.service == "groq_api" and not os.getenv("GROQ_API_KEY"):
-            raise ValueError("Configuration asks for 'groq_api' in classifier_llm, but GROQ_API_KEY is missing in .env")
             
         # Check Command Gen Service api key
         if self.agent_llm.service == "groq_api" and not os.getenv("GROQ_API_KEY"):

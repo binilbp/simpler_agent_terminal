@@ -6,14 +6,11 @@ from langchain_groq import ChatGroq
 from langchain_core.messages import SystemMessage, AIMessage, HumanMessage
 from config.settings import SETTINGS
 from agent.bash_tool import bash_tool
+from agent.llm import get_llm
 
 
 # Initialize LLM using settings
-llm = ChatGroq(
-    model_name=SETTINGS.agent_llm.model_name,
-    temperature=SETTINGS.agent_llm.model_temp
-)
-
+llm = get_llm()
 tools = [bash_tool]
 llm_with_tools = llm.bind_tools(tools)
 
