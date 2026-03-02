@@ -25,7 +25,6 @@ class Settings(BaseModel):
     default_dir: str
     banned_commands: str
     debug: bool
-    classifier_llm: LLMParams
     agent_llm: LLMParams
     
 
