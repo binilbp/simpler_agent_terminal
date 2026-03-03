@@ -22,9 +22,7 @@ class App(App):
 
     BINDINGS =[
         Binding(key="ctrl+q", action="quit", description="Quit App"),
-        Binding(key="ctrl+m", action="toggle_op_mode", description="Toggle Mode"),
-    ]
-
+        Binding(key="ctrl+m", action="toggle_op_mode", description="Toggle Mode"), ]
     
 
     def compose(self) -> ComposeResult:
@@ -100,9 +98,11 @@ class App(App):
         if state and state.next == ("tools",):
             if user_text.lower() in ['y', 'yes']:
                 write_log(self, icon= "  [green] [/] ", content = "[green]Execution Approved.[/]" )
+                set_status(self, "Executing Command")
                 self.run_agent_graph(None) 
             # modifying the tool node return to mock return
             else:
+                set_status(self, "Command Not Executed")
                 last_message = state.values["messages"][-1]
                 tool_call_id = last_message.tool_calls[0]["id"]
 
@@ -127,6 +127,7 @@ class App(App):
         # no state found means fresh run 
         write_log(self, icon="", content = "")
         write_log(self, icon="  [green] [/] ", content = user_text)
+        set_status(self, "Processing User Input")
         self.run_agent_graph(user_text)
     
 
@@ -154,6 +155,7 @@ class App(App):
                 # if it's an AI message, display it in the terminal
                 if last_message.type == "ai" and last_message.content:
                     write_log(self,"  [blue] [/] ", last_message.content, is_markdown=True)
+                    set_status(self, "Displaying Agent Output")
 
 
             # for loop stops when called interrupt or finished
@@ -172,14 +174,16 @@ class App(App):
                         if not mode_switch.value:
                             cmd_to_run = tool_args.get('cmd')
                             warning = f"[bold yellow]Executing Command[/]: [cyan]'{cmd_to_run}'[/]"
+                            set_status(self, "Auto Executing Command")
                             write_log(self, "  [yellow] [/] ", content = warning )
                             self.run_agent_graph(None)
 
                         # mannual mode
                         else:
                             cmd_to_run = tool_args.get('cmd')
-                            warning = f"[bold yellow]Command Execution Request[/]: [cyan]'{cmd_to_run}'[/]\nAllow? (y/n)"
+                            warning = f"[bold yellow]Command Execution Request[/]: [cyan]'{cmd_to_run}'[/]"
                             write_log(self, "  [yellow] [/] ", content = warning )
+                            set_status(self,"Send [green]y[/]/[green]yes[/] to allow execution.") 
                 
                 
         except APIConnectionError as e:

@@ -4,8 +4,8 @@
     "banned_commands": "",
     "debug": false,
     "agent_llm":{
-        "service" : "ollama",
-        "model_name": "qwen3:8b",
+        "service" : "groq",
+        "model_name": "qwen/qwen3-32b",
         "model_temp": 0,
         "max_retry": 2,
         "max_tokens": 600
