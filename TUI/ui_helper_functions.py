@@ -61,9 +61,9 @@ def toggle_operation_mode(self) -> None:
     # on state
     if mode_switch.value :
         mode_display.update("MANNUAL")
-        set_status(self, "Ask user permission before command execution")
+        set_status(self, "Changed to [green]Mannual Command Execution Mode[/]")
 
     # off state
     else:
         mode_display.update("AUTOMATIC")
-        set_status(self, "Command execution without user permission")
+        set_status(self, "Changed to [red]Automatic Command Execution Mode[/]")
