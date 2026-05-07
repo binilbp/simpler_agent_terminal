@@ -26,6 +26,7 @@ class Settings(BaseModel):
     banned_commands: str
     debug: bool
     agent_llm: LLMParams
+    agent_mode: str
     
 
 

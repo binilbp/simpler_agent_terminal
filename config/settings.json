@@ -3,6 +3,7 @@
     "default_dir": "default",
     "banned_commands": "",
     "debug": false,
+    "agent_mode": "terminal",
     "agent_llm":{
         "service" : "groq",
         "model_name": "qwen/qwen3-32b",
